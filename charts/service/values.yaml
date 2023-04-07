@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
   repository: mastermindg/argocd-example-app
-  tag: a4db7287a27820b294dc118b662bfbd598f22d78
+  tag: 82da3cc508c890cfd6e78f98dfcdf1b76d375be1
 
 imagePullSecrets: []
 nameOverride: ""
@@ -21,6 +21,7 @@ securityContext: {}
 service:
   type: LoadBalancer
   port: 80
+  targetPort: 5000
 
 ingress:
   enabled: false
