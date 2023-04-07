@@ -46,7 +46,7 @@ jobs:
           sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./charts/service/values.yaml
           
       - name: Commit and push changes
-        if: github.event_name != 'pull_request' && "!contains(github.event.head_commit.message, 'xxx')"
+        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, 'xxx')
         uses: devops-infra/action-commit-push@v0.3
         with:
           github_token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
