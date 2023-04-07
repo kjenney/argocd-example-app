@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
   repository: mastermindg/argocd-example-app
-  version: 76d42fd4bbe958dc5587b44a6e64c1952d62df32
+  version: b927e1cab63a9c595f589bff1f47994df8217b26
 
 imagePullSecrets: []
 nameOverride: ""
