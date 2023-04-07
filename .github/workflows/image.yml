@@ -34,11 +34,11 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Update Image Tag in Helm Chart
-        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[AUTO]')
+        if: github.event_name != 'pull_request'
         run: |
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          git_hash=$(git rev-parse "$GITHUB_SHA")
           version=$(cat ./charts/service/values.yaml | grep version: | awk '{print $2}')
-          sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./charts/service/values.yaml
+          sed -i "s/$version/$git_hash/" ./charts/service/values.yaml
 
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@v0.9.2
