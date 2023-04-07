@@ -39,7 +39,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Update Image Tag in Helm Chart
-        if: github.event_name != 'pull_request' && "!contains(github.event.head_commit.message, 'xxx')"
+        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, 'xxx')
         run: |
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           version=$(cat ./charts/service/values.yaml | grep version: | awk '{print $2}')
