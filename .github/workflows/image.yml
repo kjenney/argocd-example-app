@@ -1,16 +1,10 @@
 name: Image
 on: [push]
-permissions:
-  deployments: write
-  contents: write
-  statuses: write
-  actions: write
-  checks: read
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
 
