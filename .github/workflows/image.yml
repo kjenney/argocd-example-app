@@ -1,20 +1,11 @@
-name: Docker Image CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+name: Image
+on: [push]
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
       id-token: write
 
     steps:
@@ -47,18 +38,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Checkout Apps Repo to Prep for Updating Helm Chart
-        if: github.event_name != 'pull_request'
-        uses: actions/checkout@v3
-        with:
-          repository: kjenney/argocd-apps
-          path: dest
-
-      - name: Update Helm Chart in Infra MonoRepo
-        if: github.event_name != 'pull_request'
+      - name: Update Image Tag in Helm Chart
+        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[AUTO]')
         run: |
-          echo "Updating Helm Chart in Infra MonoRepo"
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          version=$(cat ./charts/service/values.yaml | grep version: | awk '{print $2}')
+          sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./charts/service/values.yaml
 
+      - name: Commit and push changes
+        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[AUTO]')
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_prefix: "[AUTO-COMMIT] foo/bar replace"
   
 
     
