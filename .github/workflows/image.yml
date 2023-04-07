@@ -26,6 +26,8 @@ jobs:
       - name: Commit and Push
         if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[AUTO]')
         run: |
+          git config --global user.email "kjenney@gmail.com"
+          git config --global user.name "Ken Jenney"
           git commit -a -m "[AUTO] Update tag version in helm values"
           git push
 
