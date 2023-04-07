@@ -47,5 +47,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Checkout Apps Repo to Prep for Updating Helm Chart
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@v3
+        with:
+          repository: kjenney/argocd-apps
+          path: dest
+
+      - name: Update Helm Chart in Infra MonoRepo
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "Updating Helm Chart in Infra MonoRepo"
+
+  
 
     
